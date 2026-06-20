@@ -5,6 +5,8 @@
 | SELENIUM — STATE TRANSITION (Autentikasi) — UI Test
 |--------------------------------------------------------------------------
 | Penanggung : Vincent Imanuel Putra (102062400026)
+| Prasyarat  : php artisan migrate:fresh --seed  (akun admin@ironarchive.test / password)
+|              php artisan serve  +  chromedriver --port=4444
 | Skenario (1 transisi = 1 skenario):
 |   T1. Guest akses halaman terproteksi -> diarahkan ke /login
 |   T2. Login kredensial valid          -> masuk state authenticated (/home)
@@ -19,12 +21,17 @@ use Facebook\WebDriver\WebDriverExpectedCondition;
 $driver = makeDriver();
 
 try {
-    // T1: Guest -> halaman terproteksi -> redirect login
+    // Mulai dari kondisi bersih (state Tamu)
+    $driver->manage()->deleteAllCookies();
+
+    // ---- T1: Guest -> halaman terproteksi -> redirect /login ----
+    echo "[Info] Memulai T1 (Guest akses /vehicles)...\n";
     $driver->get(appUrl('/vehicles'));
     $driver->wait(10)->until(WebDriverExpectedCondition::urlContains('/login'));
     check('T1 Guest akses /vehicles diarahkan ke /login', str_contains($driver->getCurrentURL(), '/login'));
 
-    // T2: Login valid -> authenticated (/home)
+    // ---- T2: Login valid -> authenticated (/home) ----
+    echo "[Info] Memulai T2 (Login valid)...\n";
     $driver->get(appUrl('/login'));
     $driver->findElement(WebDriverBy::id('email'))->sendKeys('admin@ironarchive.test');
     $driver->findElement(WebDriverBy::id('password'))->sendKeys('password');
@@ -32,20 +39,24 @@ try {
     $driver->wait(10)->until(WebDriverExpectedCondition::urlContains('/home'));
     check('T2 Login valid masuk ke /home', str_contains($driver->getCurrentURL(), '/home'));
 
-    // (logout dulu untuk reset state)
-    $driver->get(appUrl('/login')); // guest yg sudah login akan di-redirect; cukup utk demo
+    // Reset ke state Tamu (hapus cookie sesi) sebelum menguji login gagal
+    $driver->manage()->deleteAllCookies();
 
-    // T3: Login salah -> tetap di /login + pesan error
+    // ---- T3: Login salah -> tetap di /login + pesan error ----
+    echo "[Info] Memulai T3 (Login invalid)...\n";
     $driver->get(appUrl('/login'));
     $driver->findElement(WebDriverBy::id('email'))->sendKeys('admin@ironarchive.test');
     $driver->findElement(WebDriverBy::id('password'))->sendKeys('password-salah');
     $driver->findElement(WebDriverBy::cssSelector('button[type="submit"]'))->click();
-    sleep(1);
-    $body = $driver->findElement(WebDriverBy::tagName('body'))->getText();
-    check('T3 Login salah menampilkan pesan error', str_contains($driver->getCurrentURL(), '/login') || stripos($body, 'match') !== false || stripos($body, 'credentials') !== false);
+    // Login gagal: Laravel mengembalikan ke halaman /login (field email masih ada)
+    $driver->wait(10)->until(WebDriverExpectedCondition::presenceOfElementLocated(WebDriverBy::id('email')));
+    $url = $driver->getCurrentURL();
+    check('T3 Login salah tetap di /login (bukan /home)', str_contains($url, '/login') && !str_contains($url, '/home'));
 
-    // TODO (Vincent): tambah skenario logout (buka dropdown #navbarDropdown -> klik Logout) dan
-    //                 registrasi valid -> /home. Sertakan screenshot tiap transisi di laporan.
+    // TODO (Vincent): tambah skenario logout & registrasi valid bila perlu. Sertakan screenshot tiap transisi.
+} catch (\Throwable $e) {
+    echo "[ERROR] " . $e->getMessage() . "\n";
+    try { $driver->takeScreenshot(__DIR__ . '/Error_Selenium.png'); echo "Screenshot kegagalan disimpan.\n"; } catch (\Throwable $x) {}
 } finally {
     $driver->quit();
     summary();
