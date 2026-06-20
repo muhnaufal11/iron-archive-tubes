@@ -64,9 +64,10 @@ test('EP invalid: quantity berisi huruf ditolak', function () {
 });
 
 // BVA: image tepat 5000 KB (batas atas) -> diterima
+// Catatan: pakai create() bukan image() agar tidak butuh ekstensi GD.
 test('BVA: image 5000 KB (batas atas) diterima', function () {
     Storage::fake('public');
-    $file = UploadedFile::fake()->image('foto.jpg')->size(5000);
+    $file = UploadedFile::fake()->create('foto.jpg', 5000, 'image/jpeg');
 
     $this->actingAs($this->admin)
         ->post(route('vehicles.store'), vehiclePayload(['name' => 'WithImg', 'image' => $file]))
@@ -76,7 +77,7 @@ test('BVA: image 5000 KB (batas atas) diterima', function () {
 // BVA: image 5001 KB (batas atas + 1) -> ditolak
 test('BVA: image 5001 KB (melebihi batas) ditolak', function () {
     Storage::fake('public');
-    $file = UploadedFile::fake()->image('foto.jpg')->size(5001);
+    $file = UploadedFile::fake()->create('foto.jpg', 5001, 'image/jpeg');
 
     $this->actingAs($this->admin)
         ->post(route('vehicles.store'), vehiclePayload(['name' => 'TooBig', 'image' => $file]))
