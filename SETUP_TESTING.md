@@ -63,7 +63,7 @@ Plus 4 negara, 4 kategori, dan 2 kendaraan contoh (Tiger I, T-34).
 
 | Anggota / NIM | Teknik | Perintah |
 |---------------|--------|----------|
-| **Nanda Pratama Sugiarto** (102062400019) — Ketua | White Box (Basis Path) Vehicle | `php artisan test tests/Unit/VehicleIndexBasisPathTest.php` |
+| **Nanda Pratama Sugiarto** (102062400019)  | White Box (Basis Path) Vehicle | `php artisan test tests/Unit/VehicleIndexBasisPathTest.php` |
 | **Jiyu Danjiki Ake Heriyanto** (102062400152) | White Box User + State Transition Role | `php artisan test tests/Unit/UserManagementBasisPathTest.php tests/Feature/RoleAuthorizationTest.php` |
 | **Nadhif Maulana Fayzalty** (102062400016) | Black Box EP/BVA Vehicle + Master Data | `php artisan test tests/Feature/VehicleValidationTest.php tests/Feature/MasterDataValidationTest.php` |
 | **MUH NAUFAL RABBANI MARUN** (102062400038) | Black Box EP/BVA Auth + State Transition Auth | `php artisan test tests/Feature/UserAuthValidationTest.php tests/Feature/AuthStateTransitionTest.php` |
@@ -81,7 +81,7 @@ Plus 4 negara, 4 kategori, dan 2 kendaraan contoh (Tiger I, T-34).
 ---
 
 ## Bagian 5 — Menjalankan Test Selenium (UI) — 🧑‍💻 VINCENT
-**SIAPA: Vincent Imanuel Putra (102062400026).**
+**SIAPA: Vincent Imanuel Putra (102062400026) — Ketua.**
 
 Butuh **3 proses** berjalan bersamaan (3 terminal). Lakukan Bagian 2 & 3 dulu.
 
