@@ -12,17 +12,17 @@
 
 | No | Nama / NIM | Fokus Teknik | File Test (tools) | Bab Laporan |
 |----|------------|--------------|-------------------|-------------|
-| 1 | **Nanda Pratama Sugiarto** (102062400019) — *Ketua* | White Box (Basis Path) Vehicle | `tests/Unit/VehicleIndexBasisPathTest.php` | Bab 1 Latar Belakang + Bab 7 Referensi |
+| 1 | **Nanda Pratama Sugiarto** (102062400019) | White Box (Basis Path) Vehicle | `tests/Unit/VehicleIndexBasisPathTest.php` | Bab 1 Latar Belakang + Bab 7 Referensi |
 | 2 | **Jiyu Danjiki Ake Heriyanto** (102062400152) | White Box (Basis Path) User + State Transition Role | `tests/Unit/UserManagementBasisPathTest.php`, `tests/Feature/RoleAuthorizationTest.php` | Bab 3 White Box Manual |
 | 3 | **Nadhif Maulana Fayzalty** (102062400016) | Black Box EP + BVA | `tests/Feature/VehicleValidationTest.php`, `tests/Feature/MasterDataValidationTest.php` | Bab 2 (bagian EP + BVA) |
 | 4 | **MUH NAUFAL RABBANI MARUN** (102062400038) | Black Box EP/BVA Auth + State Transition Auth | `tests/Feature/UserAuthValidationTest.php`, `tests/Feature/AuthStateTransitionTest.php` | Bab 4 Implementasi PEST |
-| 5 | **Vincent Imanuel Putra** (102062400026) | UI Test (Selenium) State Transition | `tests/Selenium/auth_test.php`, `tests/Selenium/role_access_test.php` | Bab 5 Implementasi Selenium + Bab 6 Hasil & Analisis |
+| 5 | **Vincent Imanuel Putra** (102062400026)  — *Ketua* | UI Test (Selenium) State Transition | `tests/Selenium/auth_test.php`, `tests/Selenium/role_access_test.php` | Bab 5 Implementasi Selenium + Bab 6 Hasil & Analisis |
 
 ---
 
 ## Rincian Tugas per Anggota
 
-### 1. Nanda Pratama Sugiarto (102062400019) — Ketua Kelompok
+### 1. Nanda Pratama Sugiarto (102062400019) 
 **Teknik manual (laporan):**
 - Menggambar **flow graph** dan menghitung **V(G) = 4 + 1 = 5** untuk `VehicleController::index()` (cabang: search, nation, category, year).
 - Menentukan **5 independent path** dan menyusun tabel test case basis path.
@@ -76,7 +76,7 @@
 
 ---
 
-### 5. Vincent Imanuel Putra (102062400026)
+### 5. Vincent Imanuel Putra (102062400026) — Ketua Kelompok
 **Setup & teknik:**
 - Menyiapkan **environment Selenium** (ChromeDriver/Selenium Server) + menjalankan aplikasi (`php artisan serve`).
 - Bersama Naufal & Jiyu memfinalkan **diagram State Transition** menjadi skenario UI.
