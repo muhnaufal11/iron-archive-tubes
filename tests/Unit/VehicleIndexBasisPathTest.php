@@ -83,4 +83,58 @@ test('path-5: filter tahun hanya menampilkan tahun tsb', function () {
         ->assertDontSee('Maus');
 });
 
-// TODO (Nanda): tambahkan path kombinasi (mis. search + nation) sebagai pelengkap analisis basis path.
+// PATH KOMBINASI 1: search = TRUE, nation = TRUE
+test('path-kombinasi-1: filter search dan negara secara bersamaan', function () {
+    $jerman = Nation::factory()->create();
+    $usa = Nation::factory()->create();
+    
+    // Kendaraan 1: cocok search dan negara
+    Vehicle::factory()->create(['name' => 'Tiger I', 'nation_id' => $jerman->id]);
+    // Kendaraan 2: cocok search tapi beda negara
+    Vehicle::factory()->create(['name' => 'Tiger II', 'nation_id' => $usa->id]);
+    // Kendaraan 3: beda search tapi cocok negara
+    Vehicle::factory()->create(['name' => 'Panzer IV', 'nation_id' => $jerman->id]);
+
+    $this->actingAs($this->user)
+        ->get(route('vehicles.index', ['search' => 'Tiger', 'nation' => $jerman->id]))
+        ->assertOk()
+        ->assertSee('Tiger I')
+        ->assertDontSee('Tiger II')
+        ->assertDontSee('Panzer IV');
+});
+
+// PATH KOMBINASI 2: search = TRUE, nation = TRUE, category = TRUE, year = TRUE (semua filter)
+test('path-kombinasi-2: semua filter (search, negara, kategori, tahun) aktif', function () {
+    $jerman = Nation::factory()->create();
+    $usa = Nation::factory()->create();
+    $heavy = Category::factory()->create();
+    $medium = Category::factory()->create();
+
+    // Kendaraan cocok semua filter
+    Vehicle::factory()->create([
+        'name' => 'Tiger I',
+        'nation_id' => $jerman->id,
+        'category_id' => $heavy->id,
+        'production_year' => 1942
+    ]);
+
+    // Kendaraan tidak cocok kategori dan negara
+    Vehicle::factory()->create([
+        'name' => 'Sherman',
+        'nation_id' => $usa->id,
+        'category_id' => $medium->id,
+        'production_year' => 1942
+    ]);
+
+    $this->actingAs($this->user)
+        ->get(route('vehicles.index', [
+            'search' => 'Tiger',
+            'nation' => $jerman->id,
+            'category' => $heavy->id,
+            'year' => 1942
+        ]))
+        ->assertOk()
+        ->assertSee('Tiger I')
+        ->assertDontSee('Sherman');
+});
+
